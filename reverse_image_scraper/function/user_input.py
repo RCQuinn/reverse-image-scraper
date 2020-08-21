@@ -2,25 +2,21 @@
 from PIL import Image
 
 
-def number_of_links():
+def number_of_links(default, lower_bound, upper_bound):
     """ Asks user for a limit to how many links to search for.
     :return: A valid number.
     """
-    DEFAULT = 6
-    LOWER_BOUND = 3
-    UPPER_BOUND = 50
-
-    user_input = input("How many image links to attempt? Defaults to " + str(DEFAULT) + ".\n")
+    user_input = input("How many image links to attempt? Defaults to " + str(default) + ".\n")
     try:
         num = int(user_input)  # Try to convert user input into integer
     except (ValueError, TypeError):  # Input is NOT an integer
-        num = DEFAULT  # Use default value instead of input
+        num = default  # Use default value instead of input
 
     # Restrict to bounds
-    if num < LOWER_BOUND:  # Too few searches have high likelihood of missing hits
-        num = LOWER_BOUND
-    elif num > UPPER_BOUND:  # If the search hasn't found it by this point, it probably doesn't exist
-        num = UPPER_BOUND
+    if num < lower_bound:  # Too few searches have high likelihood of missing hits
+        num = lower_bound
+    elif num > upper_bound:  # If the search hasn't found it by this point, it probably doesn't exist
+        num = upper_bound
 
     return num
 

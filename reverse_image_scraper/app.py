@@ -71,7 +71,7 @@ def upscale_pre_process(input_dir, current_directory, default_dir, INPUT_FOLDER,
         print(cc.RED + cc.BOLD + "Folder: '" + input_dir + "' is empty!" + cc.RESET)
         exit()
 
-    num_links = user_input.number_of_links()
+    num_links = user_input.number_of_links(default=6, lower_bound=3, upper_bound=50)
     print(cc.GREEN + "Searching for " + str(num_links) + " copies..." + cc.RESET)
 
     start_time = time_now()  # Start timer
