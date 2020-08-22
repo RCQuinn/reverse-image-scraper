@@ -18,6 +18,9 @@ def number_of_links(default, lower_bound, upper_bound):
     elif num > upper_bound:  # If the search hasn't found it by this point, it probably doesn't exist
         num = upper_bound
 
+    if num < 0:     # Make sure bounds don't push the value into negatives.
+        num = 0
+
     return num
 
 
