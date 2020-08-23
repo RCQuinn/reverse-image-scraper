@@ -6,16 +6,6 @@ from unittest import mock
 from ..function import user_input
 
 
-def run_all():
-    pass
-
-
-def test_num_links_input():
-    with mock.patch('builtins.input', return_value=10):
-        assert user_input.number_of_links(6, 3, 50) == 10
-
-
-# Input format of (input, expected output)
 @pytest.mark.parametrize(
     "default, lower_bound, upper_bound, test_input, expected_output",
     [
@@ -37,7 +27,7 @@ def test_num_links_input():
         (6, -9, 50,  -1, 0)         # Return value can never be negative, so return 0
     ]
 )
-def test_is_palindrome(default, lower_bound, upper_bound, test_input, expected_output):
+def test_number_of_links(default, lower_bound, upper_bound, test_input, expected_output):
     with mock.patch('builtins.input', return_value=test_input):
         assert user_input.number_of_links(default, lower_bound, upper_bound) == expected_output
 

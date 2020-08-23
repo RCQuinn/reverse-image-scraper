@@ -19,6 +19,7 @@ from os.path import isdir
 from functools import partial
 
 # Third party imports
+import pytest
 from bs4 import SoupStrainer
 from requests_html import HTMLSession
 
@@ -27,6 +28,7 @@ from .function import os_control
 from .function import user_input
 from .function import web_control
 from .common.colors import ColorCodes as cc
+from .tests import test_user_input
 
 # Get number of physical cores
 PROCESS = psutil.cpu_count(logical=False)
@@ -48,11 +50,14 @@ def run():
                                                           DEFAULT_FOLDER), current_directory)
 
     # Mode choice
-    multi_process = True
+    if "debug" in str(sys.argv[1:]):
+        pytest.main(["", "tests"])  # Run all tests
     if "extract" in str(sys.argv[1:]):
         extract_images(output_dir, DEFAULT_FOLDER)
         exit()
-    elif "debug" in str(sys.argv[1:]):
+
+    multi_process = True
+    if "single" in str(sys.argv[1:]):
         multi_process = False
     upscale_pre_process(input_dir, current_directory, default_dir, INPUT_FOLDER, OUTPUT_FOLDER, multi_process)
 
