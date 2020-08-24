@@ -28,7 +28,6 @@ from .function import os_control
 from .function import user_input
 from .function import web_control
 from .common.colors import ColorCodes as cc
-from .tests import test_user_input
 
 # Get number of physical cores
 PROCESS = psutil.cpu_count(logical=False)
