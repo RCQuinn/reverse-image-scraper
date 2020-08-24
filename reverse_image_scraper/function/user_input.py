@@ -1,6 +1,9 @@
 # Third party imports
 from PIL import Image
 
+# Local imports
+from ..common.colors import ColorCodes as cc
+
 
 def number_of_links(default, lower_bound, upper_bound):
     """ Asks user for a limit to how many links to search for.
@@ -18,18 +21,22 @@ def number_of_links(default, lower_bound, upper_bound):
     elif num > upper_bound:  # If the search hasn't found it by this point, it probably doesn't exist
         num = upper_bound
 
-    if num < 0:     # Make sure bounds don't push the value into negatives.
-        num = 0
+    if lower_bound < 0 or upper_bound < 0:     # There should never be negative bounds.
+        print(cc.RED + "\nNegative bounds are invalid! Try again." + cc.RESET)
+        exit()
+    if lower_bound > upper_bound:              # Lower should never be greater than upper
+        print(cc.RED + "\nLower bound is greater than upper bound! Try again." + cc.RESET)
+        exit()
 
     return num
 
 
-def file_img_size(path):
+def file_img_size(abs_path):
     """ Get dimensions of user provided images.
-    :param path: Location of image.
+    :param abs_path: Absolute path of image location.
     :return: Width and height of an image.
     """
-    img = Image.open(path)
+    img = Image.open(abs_path)
     width, height = img.size  # Save relevant data
     img.close()
     return width, height
