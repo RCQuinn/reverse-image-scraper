@@ -6,12 +6,12 @@ from time import sleep
 from ..common.colors import ColorCodes as cc
 
 
-def get_parent_dir():
+def get_main_dir():
     """ Finds parent directory.
     :return: Full file path to parent directory.
     """
-    directory = os.getcwd()  # Get current working directory
-    index = directory.rfind("\\")  # Find index of last '\'
+    directory = os.path.dirname(__file__)
+    index = directory[:directory.rfind("\\")].rfind("\\")  # find index of second last "\"
     return directory[:index]  # Return everything up to that last backslash
 
 
@@ -20,7 +20,9 @@ def exceed_NTFS_file_limit(directory):
     :param directory: Directory to append prefix to.
     :return: Extended directory.
     """
-    extended_dir = "\\\\?\\" + directory  # '\?' prefix is a special long path in Windows 10
+    if directory[0] == "\\":  # If directory starts with \
+        directory = directory[1:]
+    extended_dir = "\\\\?\\" + directory  # '\\?' prefix is a special long path in Windows 10
     return extended_dir
 
 
