@@ -41,7 +41,7 @@ def run():
     DEFAULT_FOLDER = "(-) Default Results"
 
     # File setup
-    current_directory = os_control.get_parent_dir()  # Get folder the program is in
+    current_directory = os_control.get_main_dir()  # Get folder the program is in
     current_directory = os_control.exceed_NTFS_file_limit(current_directory)  # Bypass Win 10 folder length
     input_dir = os_control.make_dir(INPUT_FOLDER, current_directory)  # Create input folder
     output_dir = os_control.make_dir(OUTPUT_FOLDER, current_directory)  # Create output folder
