@@ -2,6 +2,8 @@
 import os
 
 # Third party imports
+from unittest.mock import patch
+
 import pytest
 from unittest import mock
 from PIL.Image import UnidentifiedImageError
@@ -30,31 +32,38 @@ from ..function import user_input
         (6, 3, 50,   10.5555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555, 10)  # noqa
     ]
 )
-def test_number_of_links(default, lower_bound, upper_bound, test_input, expected_output):
+def test_number_of_links__function(default, lower_bound, upper_bound, test_input, expected_output):
     with mock.patch('builtins.input', return_value=test_input):
         assert user_input.number_of_links(default, lower_bound, upper_bound) == expected_output
 
 
-def test_number_of_links_closes_on_negative_bounds():
+def test_number_of_links__errors():
     with mock.patch('builtins.input', return_value=10):
         with pytest.raises(SystemExit):
             user_input.number_of_links(3, -10, -5)
-
-
-def test_number_of_links_closes_when_lower_greater_than_upper():
-    with mock.patch('builtins.input', return_value=10):
         with pytest.raises(SystemExit):
             user_input.number_of_links(3, 10, 5)
 
 
-def test_file_img_size():
+@patch(user_input.__name__ + ".Image")
+def test_file_img_size__logic(mock_image):
+    opened_image = mock_image.open.return_value
+    opened_image.size = (42, 83)
+
+    width, height = user_input.file_img_size("a/dir/test.jpg")
+
+    mock_image.open.assert_called_once_with('a/dir/test.jpg')       # Test directory called correctly.
+    mock_image.open.return_value.close.assert_called_once_with()    # Test call to close image is run.
+    assert width == 42 and height == 83                             # Test values are as expected
+
+
+def test_file_img_size__function():
     abs_path = os.path.dirname(__file__) + "\\resources\\400x400.png"
     width, height = user_input.file_img_size(abs_path)
     assert width == 400 and height == 400
 
 
-def test_file_img_size_throws_UnidentifiedImageError():
+def test_file_img_size__errors():
     abs_path = os.path.dirname(__file__) + "\\resources\\not_an_image.txt"
     with pytest.raises(UnidentifiedImageError):
         user_input.file_img_size(abs_path)
-
