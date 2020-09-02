@@ -7,7 +7,7 @@ from ..common.colors import ColorCodes as cc
 
 
 def get_main_dir():
-    """ Finds parent directory.
+    """ Finds root of this project.
     :return: Full file path to parent directory.
     """
     directory = os.path.dirname(__file__)
@@ -102,7 +102,7 @@ def make_dir(name, directory):
 
 def move_file(filename, source, destination):
     """ Attempts to move file. If moving would cause data loss, then the file is renamed until it can be moved safely.
-    :param filename: File to move.
+    :param filename: File to move (including fil extension).
     :param source: Current location of the file to be moved.
     :param destination: New location of the file.
     """
@@ -121,3 +121,4 @@ def move_file(filename, source, destination):
         except FileExistsError:  # File name is already taken
             filename_new = title + "(" + str(count) + ")" + extension  # Increment file name
             count += 1
+
