@@ -2,29 +2,11 @@
 from unittest.mock import patch, call
 
 # Third party imports
-import PIL
 import pytest
-
-# Local imports
 from PIL import Image
 
+# Local imports
 from ..function import os_control
-
-# EXAMPLE AUTO TEST
-# https://medium.com/datadriveninvestor/mocking-python-like-a-boss-65377d943c20
-# Def test(mocker):
-#   # Arrange - replace below with resulting print
-#   from mock_autogen.pytest_mocker import PytestMocker
-#   print(PytestMocker(zip_writer).mock_modules().generate())
-#
-#   # Act. Call the function to test
-#   function.to_test("test_string")
-#
-#   # Assert
-#   import mock_autogen.generator
-#   generated_asserts = mock_autogen.generator.generate_asserts(mock_zipfile)
-#   print("\n")
-#   print(generated_asserts)
 
 
 def test_get_main_dir__returns_expected_folder_name():
@@ -87,7 +69,7 @@ def test_make_note__creates_expected_file(mock_open):
 
 
 def test_save_image__succeeds_saving():
-    image = PIL.Image.new(mode="RGB", size=(200, 200))
+    image = Image.new(mode="RGB", size=(200, 200))
     image.format = "png"
 
     with patch.object(image, 'save') as mock_save:
@@ -100,7 +82,7 @@ def test_save_image__succeeds_saving():
 
 
 def test_save_image__fails_saving():
-    image = PIL.Image.new(mode="RGB", size=(200, 200))
+    image = Image.new(mode="RGB", size=(200, 200))
     image.format = "png"
 
     with patch.object(image, 'save', side_effect=OSError) as mock_save:
@@ -162,10 +144,3 @@ def test_move_file__fails_move(mock_rename):
         call("/a/source/name.txt", "/a/destination/name(3).txt")
     ]
     assert mock_rename.call_args_list == calls
-
-
-
-
-
-
-
