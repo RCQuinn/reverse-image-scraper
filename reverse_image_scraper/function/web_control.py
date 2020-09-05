@@ -75,6 +75,9 @@ def href_from_text(session, soup, text):
     :param text: String to search for.
     :return: URL to web page, or None if nothing exists.
     """
+    if text == "" or text is None:  # Can't get info from something that doesn't exist
+        return None
+
     find_text = soup.find(text=text)  # Get the BeautifulSoup object for the first instance of 'text'
     try:
         find_href = str(find_text.parent.get("href"))  # Find the href parent of the text.
@@ -82,11 +85,8 @@ def href_from_text(session, soup, text):
     except AttributeError:  # The text may not exist in the soup, or exist at all.
         return None
     else:
-        try:
-            request = session.get(url)
-            request.html.render()  # Get the requests page, loading javascript
-        except ConnectionError:  # Empty 'text' value causes failed url
-            return None
+        request = session.get(url)
+        request.html.render()  # Get the requests page, loading javascript
         return request
 
 
@@ -94,14 +94,14 @@ def img_links_from_href(request, strainer, num_links):
     """ Find all URLs that end in a image extension
     :param request: Source of the HTML page.
     :param strainer: Restriction on what elements should be found.
-    :param num_links: Limit on the number of links to be returned.
+    :param num_links: Limit on the number of links to be returned. Expected to be a positive value.
     :return: A list of URLs
     """
     soup = request_to_bs4(strainer, request)
     soup_str = str(soup)  # Convert soup to string
 
     # Gets any link that ends in an image format. Rejects any link that contains a: \ [ ] { } < > %
-    snipped = re.findall('http[^\\\\\\[\\]{}<>%]*\\.(?:jpg|jpeg|png)', soup_str, re.IGNORECASE)
+    snipped = re.findall('http[^\\\\{}\\[\\]<>%]*\\.(?:jpg|jpeg|png)', soup_str, re.IGNORECASE)
     return snipped[:num_links]  # Return limited number of results.
 
 
@@ -115,10 +115,10 @@ def img_size(session, url):
     try:
         # Get status code
         request = session.get(url)
-        if request.status_code == 403:
+        if request.status_code == 403:  # Forbidden error
             err = 403
 
-        data = session.get(url).content
+        data = request.content
         img = Image.open(BytesIO(data))
         width, height = img.size
         return img, width, height, err
