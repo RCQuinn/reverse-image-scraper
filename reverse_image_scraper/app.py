@@ -50,7 +50,8 @@ def run():
 
     # Mode choice
     if "debug" in str(sys.argv[1:]):
-        pytest.main(["", "tests"])  # Run all tests
+        test_dir = os_control.join_dir(current_directory, "reverse_image_scraper", "tests")
+        pytest.main([test_dir])  # Run all tests
     if "extract" in str(sys.argv[1:]):
         extract_images(output_dir, DEFAULT_FOLDER)
         exit()
